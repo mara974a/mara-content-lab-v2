@@ -1,0 +1,1685 @@
+/* =====================================================================
+   MARA CONTENT LAB — THE MONOLITHIC APERTURE (SIGNAL EDITION)
+   A rare editorial document held inside a deep black void.
+   ===================================================================== */
+
+:root {
+  /* Chromatic Void System */
+  --bg-void: #080808;
+  --bg-surface: #0e0e0e;
+  --bg-surface-elevated: #141414;
+  --bg-input: #121212;
+
+  /* Typography Colors */
+  --text-primary: #EAEAEA;
+  --text-secondary: #A1A1A6;
+  --text-muted: #6e6e73;
+
+  /* Structural Fine Rules */
+  --rule-subtle: rgba(255, 255, 255, 0.08);
+  --rule-medium: rgba(255, 255, 255, 0.12);
+  --rule-strong: rgba(255, 255, 255, 0.20);
+
+  /* Pale Gold Constraint (Used solely for $297 & terminal mark) */
+  --accent-gold: #d4b26f;
+  --accent-gold-rule: rgba(212, 178, 111, 0.4);
+
+  /* Error State */
+  --state-error: #e58a8a;
+
+  /* Font Families */
+  --font-serif: "Newsreader", "Iowan Old Style", "Apple Garamond", "Baskerville", "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", "Roboto Mono", Menlo, Consolas, Monaco, monospace;
+
+  /* Layout Width */
+  --max-width: 1280px;
+}
+
+/* Base Reset & Document Tone */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-void);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 1px solid var(--accent-gold);
+  outline-offset: 3px;
+}
+
+/* Master Void Shell */
+.void-monolith {
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--bg-void);
+  width: 100%;
+}
+
+.monolith-container {
+  width: min(100% - 3rem, var(--max-width));
+  margin: 0 auto;
+}
+
+/* =====================================================================
+   HEADER — MINIMAL, QUIET, NO PILL NAVIGATION
+   ===================================================================== */
+
+.monolith-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: var(--bg-void);
+  border-bottom: 1px solid var(--rule-subtle);
+  transition: border-color 0.25s ease;
+}
+
+.monolith-header.is-scrolled {
+  border-bottom-color: var(--rule-medium);
+}
+
+.header-shell {
+  width: min(100% - 3rem, var(--max-width));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+
+.wordmark {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.site-nav a {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.site-nav a:hover {
+  color: var(--text-primary);
+}
+
+.site-nav .external-link {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.site-nav .external-link:hover {
+  color: var(--text-primary);
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.toggle-bar {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background-color: var(--text-primary);
+  margin: 6px 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* =====================================================================
+   TWO-RAIL ASYMMETRIC GRID (32% LEFT / 68% RIGHT)
+   ===================================================================== */
+
+.two-rail-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 32%) 1fr;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: start;
+}
+
+.rail-left {
+  position: relative;
+}
+
+.rail-sticky-stack {
+  position: sticky;
+  top: 6.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.rail-meta-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.rail-right {
+  min-width: 0;
+}
+
+.chapter-monolith {
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+  border-bottom: 1px solid var(--rule-subtle);
+}
+
+.chapter-index {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: block;
+}
+
+.chapter-index.centered-index {
+  text-align: center;
+}
+
+.rail-section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.rail-summary {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 32ch;
+}
+
+.rail-marginalia {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* =====================================================================
+   APERTURE SYSTEM — CONSTRAINED LIGHT APERTURES
+   ===================================================================== */
+
+.aperture-container {
+  position: relative;
+  width: 100%;
+}
+
+.aperture-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #0b0b0b;
+  border: 1px solid var(--rule-medium);
+  overflow: hidden;
+}
+
+.aperture-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.aperture-poster-fallback {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.aperture-mobile-img {
+  display: none;
+}
+
+.aperture-caption {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 0.6rem;
+}
+
+/* =====================================================================
+   CHAPTER 01 — SIGNAL / HERO
+   ===================================================================== */
+
+.hero-monolith {
+  padding-top: clamp(3.5rem, 6vw, 6rem);
+  padding-bottom: clamp(4.5rem, 8vw, 7.5rem);
+}
+
+.hero-aperture {
+  aspect-ratio: 9/19;
+  max-width: 270px;
+  width: 100%;
+  margin-right: auto;
+}
+
+.hero-editorial-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 0.5rem;
+}
+
+.chapter-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 1.5rem;
+}
+
+.hero-editorial-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 5.5vw, 4.6rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  margin: 0 0 1.75rem;
+}
+
+.hero-editorial-lead {
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  max-width: 54ch;
+  margin: 0 0 2.5rem;
+}
+
+.hero-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.hero-transmission-line {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  border-top: 1px solid var(--rule-subtle);
+  padding-top: 1.25rem;
+  width: 100%;
+  max-width: 54ch;
+}
+
+/* Editorial Buttons — Crisp Architectural Edges */
+.editorial-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 0.85rem 1.85rem;
+  border-radius: 0;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  text-decoration: none;
+}
+
+.primary-btn {
+  background-color: var(--text-primary);
+  color: var(--bg-void);
+  border-color: var(--text-primary);
+}
+
+.primary-btn:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.secondary-btn {
+  background-color: transparent;
+  color: var(--text-primary);
+  border-color: var(--rule-strong);
+}
+
+.secondary-btn:hover {
+  border-color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.btn-full {
+  width: 100%;
+}
+
+/* =====================================================================
+   CHAPTER 02 — NOISE / PROBLEM
+   ===================================================================== */
+
+.noise-interstitial-aperture {
+  margin-bottom: clamp(3rem, 5vw, 4.5rem);
+  border-top: 1px solid var(--rule-subtle);
+  border-bottom: 1px solid var(--rule-subtle);
+  padding: 1.5rem 0;
+}
+
+.motion-aperture {
+  aspect-ratio: 21/5;
+  max-height: 180px;
+  width: 100%;
+}
+
+.problem-editorial-body {
+  max-width: 64ch;
+}
+
+.problem-statement {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.8vw, 3rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0 0 1.5rem;
+}
+
+.problem-observation {
+  font-size: 1.12rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0 0 2rem;
+}
+
+.problem-thesis-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-left: 2px solid var(--rule-medium);
+  padding-left: 1.5rem;
+}
+
+.problem-thesis-stack p {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.problem-thesis-stack p:first-child {
+  color: var(--text-muted);
+}
+
+/* =====================================================================
+   CHAPTER 03 — FOCUS / THE SPRINT (SERVICE SPECIFICATION)
+   ===================================================================== */
+
+.offer-service-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.offer-price-spec {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border-left: 2px solid var(--accent-gold);
+  padding-left: 1rem;
+  margin: 0.5rem 0;
+}
+
+.price-tag {
+  font-family: var(--font-mono);
+  font-size: 1.85rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--accent-gold);
+}
+
+.price-term {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.delivery-spec {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.offer-margin-artifact {
+  position: relative;
+  width: 140px;
+  height: 28px;
+  overflow: hidden;
+  opacity: 0.08;
+  border: 1px solid var(--rule-subtle);
+}
+
+.texture-artifact-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.offer-cta-wrap {
+  margin-top: 0.5rem;
+}
+
+.offer-register {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.offer-headline-group {
+  border-bottom: 1px solid var(--rule-subtle);
+  padding-bottom: 1.5rem;
+}
+
+.offer-mantra {
+  font-family: var(--font-serif);
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.offer-spec-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  border-bottom: 1px solid var(--rule-subtle);
+  padding-bottom: 2.5rem;
+}
+
+.spec-col-heading {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 0 0 1.25rem;
+  border-bottom: 1px solid var(--rule-subtle);
+  padding-bottom: 0.6rem;
+}
+
+.spec-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.spec-list li {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  position: relative;
+  padding-left: 1.2rem;
+}
+
+.spec-list li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+}
+
+.offer-payment-terms {
+  border-left: 1px solid var(--rule-medium);
+  padding-left: 1.5rem;
+}
+
+.payment-heading {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 0.6rem;
+}
+
+.offer-payment-terms p {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 60ch;
+}
+
+/* =====================================================================
+   CHAPTER 04 — REFRACTION / PROCESS
+   ===================================================================== */
+
+.process-baseline-aperture {
+  margin-bottom: clamp(3rem, 5vw, 4.5rem);
+  border-top: 1px solid var(--rule-subtle);
+  border-bottom: 1px solid var(--rule-subtle);
+  padding: 1.5rem 0;
+}
+
+.process-aperture {
+  aspect-ratio: 21/4;
+  max-height: 140px;
+  width: 100%;
+}
+
+.process-progress-track {
+  width: 100%;
+  height: 2px;
+  background-color: var(--rule-subtle);
+  position: relative;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.process-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background-color: rgba(255, 255, 255, 0.45);
+  transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-section.is-visible .process-progress-bar {
+  width: 100%;
+}
+
+.process-sequence {
+  display: flex;
+  flex-direction: column;
+}
+
+.process-sequence-item {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: 1.5rem;
+  padding: 1.85rem 0;
+  border-bottom: 1px solid var(--rule-subtle);
+  align-items: baseline;
+}
+
+.process-sequence-item:first-child {
+  border-top: 1px solid var(--rule-subtle);
+}
+
+.step-sequence-num {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+
+.step-sequence-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.step-sequence-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.step-sequence-desc {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 58ch;
+}
+
+/* =====================================================================
+   CHAPTER 05 — PROOF / SAMPLE (MANUSCRIPT READING ZONE)
+   ===================================================================== */
+
+.sample-disclosure {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.sample-margin-note {
+  border-top: 1px solid var(--rule-subtle);
+  padding-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.margin-note-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.margin-note-title {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.margin-note-author {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.margin-note-link {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+  display: inline-block;
+  transition: color 0.2s ease;
+}
+
+.margin-note-link:hover {
+  color: var(--text-primary);
+}
+
+.margin-note-quote {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.manuscript-reading-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 2.75rem;
+  max-width: 66ch;
+}
+
+.manuscript-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.manuscript-section-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.manuscript-angle-text {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.manuscript-draft-container {
+  border-top: 1px solid var(--rule-subtle);
+  border-bottom: 1px solid var(--rule-subtle);
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.draft-body {
+  border-left: 2px solid var(--rule-medium);
+  padding-left: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.draft-body p {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.manuscript-distinction-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.distinction-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.distinction-list li {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  position: relative;
+  padding-left: 1.2rem;
+}
+
+.distinction-list li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+}
+
+/* =====================================================================
+   CHAPTER 06 — HUMAN JUDGMENT / ACCOUNTABILITY
+   ===================================================================== */
+
+.accountability-editorial-stack {
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.accountability-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.8vw, 3rem);
+  font-weight: 400;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 1.5rem 0 0;
+}
+
+.accountability-aperture-wrap {
+  width: 100%;
+  max-width: 380px;
+  margin: 2.75rem auto;
+}
+
+.human-aperture {
+  aspect-ratio: 1/1;
+  width: 100%;
+}
+
+.accountability-statement-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.accountability-core-thought {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+  font-weight: 400;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.accountability-sub-thought {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 52ch;
+}
+
+/* =====================================================================
+   CHAPTER 07 — FIT (FILTER DECISION)
+   ===================================================================== */
+
+.fit-split-register {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 4vw, 4rem);
+  border-top: 1px solid var(--rule-subtle);
+  border-bottom: 1px solid var(--rule-subtle);
+  padding: 2.5rem 0;
+}
+
+.fit-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.good-fit-col {
+  border-right: 1px solid var(--rule-subtle);
+  padding-right: clamp(1.5rem, 3vw, 3rem);
+}
+
+.fit-col-title {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 0;
+  border-bottom: 1px solid var(--rule-subtle);
+  padding-bottom: 0.5rem;
+}
+
+.not-fit-title {
+  color: var(--text-muted);
+}
+
+.fit-bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fit-bullet-list li {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  position: relative;
+  padding-left: 1.3rem;
+}
+
+.fit-bullet-list li::before {
+  content: "+";
+  position: absolute;
+  left: 0;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.not-fit-bullets li::before {
+  content: "—";
+  color: var(--text-muted);
+}
+
+/* =====================================================================
+   CHAPTER 08 — OPERATOR / ABOUT
+   ===================================================================== */
+
+.operator-portrait-aperture {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.portrait-frame {
+  width: 140px;
+  height: 180px;
+  background-color: #0b0b0b;
+  border: 1px solid var(--rule-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portrait-monogram {
+  font-family: var(--font-serif);
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.portrait-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.operator-name {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--text-primary);
+}
+
+.operator-role {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.about-editorial-prose {
+  max-width: 62ch;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.about-manifesto-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.about-narrative {
+  font-size: 1.1rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.about-conclusion {
+  font-size: 1.1rem;
+  line-height: 1.75;
+  color: var(--text-primary);
+  margin: 0;
+  border-left: 2px solid var(--rule-medium);
+  padding-left: 1.5rem;
+}
+
+/* =====================================================================
+   CHAPTER 09 — REFERENCE / FAQ
+   ===================================================================== */
+
+.faq-register {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--rule-subtle);
+}
+
+.faq-entry {
+  border-bottom: 1px solid var(--rule-subtle);
+}
+
+.faq-trigger {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  background: none;
+  border: none;
+  padding: 1.5rem 0;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.2s ease;
+}
+
+.faq-trigger:hover .faq-title {
+  color: #ffffff;
+}
+
+.faq-index {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  width: 2.2rem;
+  flex-shrink: 0;
+}
+
+.faq-title {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--text-primary);
+  flex: 1;
+  transition: color 0.2s ease;
+}
+
+.faq-icon {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.faq-panel {
+  padding: 0 0 1.75rem calc(2.2rem + 1.5rem);
+  color: var(--text-secondary);
+}
+
+.faq-body p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin: 0;
+  max-width: 60ch;
+}
+
+/* =====================================================================
+   CHAPTER 10 — LANDING / REQUEST (CALM ZONE)
+   ===================================================================== */
+
+.signal-resolution-line {
+  width: 32px;
+  height: 1px;
+  background-color: var(--accent-gold);
+  margin-bottom: 0.5rem;
+}
+
+.request-rail-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.request-rail-notice {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 32ch;
+}
+
+.request-security-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  border-top: 1px solid var(--rule-subtle);
+  padding-top: 1.25rem;
+}
+
+.indicator-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-gold);
+  border-radius: 50%;
+}
+
+/* Matte Near-Black Form Register */
+.monolith-form-container {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--rule-medium);
+  padding: clamp(1.75rem, 4vw, 3rem);
+}
+
+.form-stepper {
+  display: flex;
+  gap: 1.5rem;
+  border-bottom: 1px solid var(--rule-subtle);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stepper-node {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+
+.stepper-node.current,
+.stepper-node.completed {
+  opacity: 1;
+}
+
+.stepper-num {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+
+.stepper-node.current .stepper-num {
+  color: var(--accent-gold);
+}
+
+.stepper-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.stepper-node.current .stepper-label {
+  color: var(--text-primary);
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.field-span-full {
+  grid-column: 1 / -1;
+}
+
+.field-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.field-item input,
+.field-item textarea {
+  background-color: var(--bg-input);
+  border: 1px solid var(--rule-medium);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  padding: 0.85rem 1rem;
+  border-radius: 0;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  width: 100%;
+}
+
+.field-item input:focus,
+.field-item textarea:focus {
+  border-color: var(--accent-gold);
+  background-color: #161616;
+  outline: none;
+}
+
+.field-item textarea {
+  resize: vertical;
+}
+
+.field-error {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--state-error);
+  letter-spacing: 0.04em;
+}
+
+/* Review Register */
+.review-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.review-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.review-register {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--rule-subtle);
+}
+
+.review-row {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--rule-subtle);
+  font-size: 0.9rem;
+}
+
+.review-key {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.review-val {
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.checkbox-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.checkbox-field input[type="checkbox"] {
+  margin-top: 0.25rem;
+  accent-color: var(--accent-gold);
+  width: 1rem;
+  height: 1rem;
+}
+
+.checkbox-text {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.form-controls {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  border-top: 1px solid var(--rule-subtle);
+  padding-top: 1.5rem;
+}
+
+/* =====================================================================
+   FOOTER
+   ===================================================================== */
+
+.monolith-footer {
+  border-top: 1px solid var(--rule-subtle);
+  padding: 3.5rem 0;
+  background-color: var(--bg-void);
+}
+
+.footer-register {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2rem;
+}
+
+.footer-brand-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-brand-name {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.footer-contact-email {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.footer-contact-email:hover {
+  color: var(--text-primary);
+}
+
+.footer-links-col {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer-nav-link {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.footer-nav-link:hover {
+  color: var(--text-primary);
+}
+
+/* =====================================================================
+   LEGAL PAGES (/privacy, /terms, /thank-you)
+   ===================================================================== */
+
+.legal-shell {
+  min-height: 100vh;
+  background-color: var(--bg-void);
+  padding: 3rem 1.5rem 6rem;
+}
+
+.legal-topbar {
+  max-width: 860px;
+  margin: 0 auto 2rem;
+}
+
+.back-link {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+}
+
+.legal-card {
+  max-width: 860px;
+  margin: 0 auto;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--rule-medium);
+  padding: clamp(2rem, 5vw, 3.5rem);
+}
+
+.legal-card h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 4.5vw, 3.5rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0.5rem 0 0.5rem;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.legal-meta {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--rule-subtle);
+  padding-bottom: 1.5rem;
+  margin: 0 0 2rem;
+}
+
+.legal-section {
+  margin-top: 2rem;
+  border-bottom: 1px solid var(--rule-subtle);
+  padding-bottom: 1.5rem;
+}
+
+.legal-section h2 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem;
+}
+
+.legal-section p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.legal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.legal-list li {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  position: relative;
+  padding-left: 1.2rem;
+}
+
+.legal-list li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+}
+
+.legal-note {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule-subtle);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* =====================================================================
+   MOTION & TRANSITIONS
+   Strictly restrained: single 8px reveal on entering viewport
+   ===================================================================== */
+
+.reveal-section {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.reveal-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =====================================================================
+   RESPONSIVE DESIGN (1024px, 768px, 390px, 375px)
+   ===================================================================== */
+
+@media (max-width: 1024px) {
+  .two-rail-layout {
+    grid-template-columns: 280px 1fr;
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .monolith-header {
+    height: 64px;
+  }
+
+  .header-shell {
+    height: 64px;
+  }
+
+  .site-nav {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background-color: var(--bg-void);
+    border-bottom: 1px solid var(--rule-medium);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem 1.5rem;
+    gap: 1.25rem;
+  }
+
+  .site-nav.nav-visible {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  .two-rail-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .rail-sticky-stack {
+    position: static;
+  }
+
+  /* Hero on mobile uses hero-mobile.jpg static image */
+  .desktop-video-only {
+    display: none !important;
+  }
+
+  .aperture-mobile-img {
+    display: block !important;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-aperture {
+    aspect-ratio: 16/10;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .offer-spec-columns {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .fit-split-register {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .good-fit-col {
+    border-right: none;
+    border-bottom: 1px solid var(--rule-subtle);
+    padding-right: 0;
+    padding-bottom: 2rem;
+  }
+
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .review-row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .footer-register {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .faq-panel {
+    padding-left: 0;
+  }
+}
+
+/* =====================================================================
+   PREFERS-REDUCED-MOTION
+   ===================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .reveal-section {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .process-progress-bar {
+    width: 100% !important;
+    transition: none !important;
+  }
+
+  /* Videos hidden, static poster fallbacks shown */
+  .aperture-video {
+    display: none !important;
+  }
+
+  .aperture-poster-fallback {
+    display: block !important;
+  }
+}
