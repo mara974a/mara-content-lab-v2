@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { insertProjectRequest } from "@/lib/supabase";
+import { dispatchProjectRequestEmails } from "@/lib/email";
 import { ProjectRequestInput } from "@/lib/types";
 
 export async function OPTIONS() {
@@ -80,28 +81,34 @@ export async function POST(req: NextRequest) {
 
     const userAgent = req.headers.get("user-agent") || undefined;
 
-    const result = await insertProjectRequest(
-      {
-        name: name.trim(),
-        email: email.trim().toLowerCase(),
-        role: role.trim(),
-        company: company?.trim(),
-        website: website?.trim(),
-        sourceUrl: sourceUrl.trim(),
-        audience: audience.trim(),
-        goal: goal.trim(),
-        notes: notes?.trim(),
-        consentTerms: Boolean(consentTerms),
-        marketingOptIn: Boolean(marketingOptIn),
-      },
-      userAgent
-    );
+    const requestData = {
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      role: role.trim(),
+      company: company?.trim(),
+      website: website?.trim(),
+      sourceUrl: sourceUrl.trim(),
+      audience: audience.trim(),
+      goal: goal.trim(),
+      notes: notes?.trim(),
+      consentTerms: Boolean(consentTerms),
+      marketingOptIn: Boolean(marketingOptIn),
+    };
+
+    const result = await insertProjectRequest(requestData, userAgent);
 
     if (!result.success) {
       return NextResponse.json(
         { success: false, message: result.error || "Failed to record request." },
         { status: 500 }
       );
+    }
+
+    // Trigger email notification to Parth / Mara
+    try {
+      await dispatchProjectRequestEmails(requestData);
+    } catch (mailErr) {
+      console.warn("[Email Notification Warning]", mailErr);
     }
 
     return NextResponse.json(
