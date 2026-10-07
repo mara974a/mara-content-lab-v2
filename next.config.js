@@ -6,12 +6,15 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
 ];
 
+const isCloudflareExport = process.env.CF_PAGES === "1" || process.env.OUTPUT_EXPORT === "true";
+
 const nextConfig = {
-  output: "export",
+  ...(isCloudflareExport ? { output: "export" } : {}),
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],
+    unoptimized: isCloudflareExport,
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

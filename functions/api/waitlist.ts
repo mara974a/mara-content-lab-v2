@@ -3,6 +3,15 @@ interface Env {
   SUPABASE_SERVICE_ROLE_KEY?: string;
 }
 
+type PagesFunction<T = any> = (context: {
+  request: Request;
+  env: T;
+  params?: Record<string, string | string[]>;
+  waitUntil?: (promise: Promise<any>) => void;
+  next?: () => Promise<Response>;
+  data?: Record<string, any>;
+}) => Promise<Response> | Response;
+
 export const onRequestPost: PagesFunction<Env> = async (context) => {
   try {
     const body: any = await context.request.json();

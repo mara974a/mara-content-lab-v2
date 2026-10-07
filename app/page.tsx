@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import Header from "@/components/Header";
@@ -468,11 +467,12 @@ export default function HomePage() {
           <div className="container" style={{ maxWidth: "860px" }}>
             <div className="card" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "2.5rem", alignItems: "center" }}>
               <div style={{ position: "relative", width: "100%", maxWidth: "260px", margin: "0 auto" }}>
-                <Image
+                <img
                   src="/media/parth-headshot.jpg"
                   alt="Parth Tiwari, Founder and Editor at Mara Content Lab"
                   width={260}
                   height={347}
+                  loading="eager"
                   style={{
                     borderRadius: "var(--radius-md)",
                     objectFit: "cover",
@@ -480,7 +480,6 @@ export default function HomePage() {
                     maxWidth: "100%",
                     height: "auto",
                   }}
-                  priority
                 />
               </div>
 
