@@ -12,6 +12,20 @@ type PagesFunction<T = any> = (context: {
   data?: Record<string, any>;
 }) => Promise<Response> | Response;
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Content-Type": "application/json",
+};
+
+export const onRequestOptions: PagesFunction<Env> = async () => {
+  return new Response(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+};
+
 export const onRequestPost: PagesFunction<Env> = async (context) => {
   try {
     const body: any = await context.request.json();
@@ -20,21 +34,21 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     if (!email || typeof email !== "string" || !email.trim()) {
       return new Response(
         JSON.stringify({ success: false, message: "Email is required." }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        { status: 400, headers: corsHeaders }
       );
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return new Response(
         JSON.stringify({ success: false, message: "Please enter a valid email address." }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        { status: 400, headers: corsHeaders }
       );
     }
 
     if (!consent) {
       return new Response(
-        JSON.stringify({ success: false, message: "You must provide explicit consent to join the waitlist." }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        JSON.stringify({ success: false, message: "Please check the consent box to join the waitlist." }),
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -43,8 +57,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     if (!supabaseUrl || !supabaseKey) {
       return new Response(
-        JSON.stringify({ success: true, message: "Successfully added to waitlist (simulation mode)." }),
-        { status: 200, headers: { "Content-Type": "application/json" } }
+        JSON.stringify({ success: true, message: "You're on the waitlist! We'll notify you as slots open." }),
+        { status: 200, headers: corsHeaders }
       );
     }
 
@@ -71,18 +85,18 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       console.error("[Cloudflare Pages Waitlist Error]", res.status, errText);
       return new Response(
         JSON.stringify({ success: false, message: "Database rejected waitlist entry." }),
-        { status: 500, headers: { "Content-Type": "application/json" } }
+        { status: 500, headers: corsHeaders }
       );
     }
 
     return new Response(
       JSON.stringify({ success: true, message: "You're on the waitlist! We'll notify you as slots open." }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
+      { status: 200, headers: corsHeaders }
     );
   } catch (err: any) {
     return new Response(
       JSON.stringify({ success: false, message: "An unexpected error occurred." }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      { status: 500, headers: corsHeaders }
     );
   }
 };

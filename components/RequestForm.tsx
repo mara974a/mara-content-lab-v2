@@ -82,22 +82,32 @@ export default function RequestForm() {
     setIsSubmitting(true);
     setServerError("");
 
+    let normalizedSourceUrl = formData.sourceUrl.trim();
+    if (!/^https?:\/\//i.test(normalizedSourceUrl)) {
+      normalizedSourceUrl = "https://" + normalizedSourceUrl;
+    }
+
+    const payload = {
+      ...formData,
+      sourceUrl: normalizedSourceUrl,
+    };
+
     try {
       const res = await fetch("/api/request", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
       if (res.ok && data.success) {
-        router.push("/thank-you");
+        window.location.href = "/thank-you";
       } else {
         setServerError(data.message || "Failed to submit project request. Please try again.");
         setIsSubmitting(false);
       }
     } catch {
-      setServerError("Network error. Please try again or email mara974a@gmail.com directly.");
+      setServerError("Network connection issue. Please check your internet connection or email parth.pt.974@gmail.com directly.");
       setIsSubmitting(false);
     }
   };
@@ -191,11 +201,11 @@ export default function RequestForm() {
               <label htmlFor="website" className="form-label">Website or LinkedIn <span className="optional">(optional)</span></label>
               <input
                 id="website"
-                type="url"
+                type="text"
                 value={formData.website}
                 onChange={(e) => updateField("website", e.target.value)}
                 className="form-input"
-                placeholder="https://linkedin.com/in/alex"
+                placeholder="e.g. linkedin.com/in/alex or website"
               />
             </div>
           </div>
@@ -215,12 +225,12 @@ export default function RequestForm() {
             <label htmlFor="sourceUrl" className="form-label">Source URL *</label>
             <input
               id="sourceUrl"
-              type="url"
+              type="text"
               required
               value={formData.sourceUrl}
               onChange={(e) => updateField("sourceUrl", e.target.value)}
               className="form-input"
-              placeholder="https://youtube.com/watch?... or podcast / essay / doc link"
+              placeholder="e.g. youtube.com/watch?... or podcast / essay / doc link"
             />
             <span style={{ fontSize: "0.8125rem", color: "var(--text-muted)", marginTop: "0.25rem", display: "block" }}>
               Link to your talk, interview transcript, podcast episode, or long-form essay.

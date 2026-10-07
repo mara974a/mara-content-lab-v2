@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { insertProjectRequest } from "@/lib/supabase";
 import { ProjectRequestInput } from "@/lib/types";
 
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    },
+  });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
