@@ -93,12 +93,17 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       );
     }
 
-    const resendApiKey = context.env.RESEND_API_KEY;
-    const adminEmail = context.env.NOTIFY_EMAIL || "mara974a@gmail.com";
+    const supabaseUrl = context.env?.SUPABASE_URL;
+    const supabaseKey = context.env?.SUPABASE_SERVICE_ROLE_KEY;
+    const resendApiKey = context.env?.RESEND_API_KEY;
+    const adminEmail = context.env?.NOTIFY_EMAIL || "mara974a@gmail.com";
 
     // Email dispatch function for Cloudflare Worker
     const sendNotificationEmail = async () => {
-      if (!resendApiKey) return;
+      if (!resendApiKey) {
+        console.info("[Cloudflare Simulation] RESEND_API_KEY not set. Email notification skipped.");
+        return;
+      }
 
       const adminHtml = `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #111827; background: #ffffff; border: 1px solid #E5E7EB; border-radius: 8px;">
@@ -235,8 +240,13 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       { status: 200, headers: corsHeaders }
     );
   } catch (err: any) {
+    console.error("[Cloudflare /api/request Error]", err);
     return new Response(
-      JSON.stringify({ success: false, message: "An unexpected error occurred while processing your request." }),
+      JSON.stringify({
+        success: false,
+        message: "An unexpected error occurred while processing your request.",
+        error: err?.message || String(err),
+      }),
       { status: 500, headers: corsHeaders }
     );
   }
