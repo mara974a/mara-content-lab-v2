@@ -26,6 +26,23 @@ export default function WaitlistForm() {
     setStatus("loading");
     setMessage("");
 
+    // Instant zero-config inbox delivery to mara974a@gmail.com
+    try {
+      await fetch("https://formsubmit.co/ajax/mara974a@gmail.com", {
+        method: "POST",
+        keepalive: true,
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: `🎯 New Sprint Waitlist Entry: ${email}`,
+          _template: "table",
+          _captcha: "false",
+          "Subscriber Email": email,
+          "Consent Given": "Yes",
+          "Source": "Homepage Sprint Waitlist",
+        }),
+      }).catch(() => {});
+    } catch {}
+
     try {
       const res = await fetch("/api/waitlist", {
         method: "POST",

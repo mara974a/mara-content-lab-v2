@@ -101,7 +101,32 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     // Email dispatch function for Cloudflare Worker
     const sendNotificationEmail = async () => {
       if (!resendApiKey) {
-        console.info("[Cloudflare Simulation] RESEND_API_KEY not set. Email notification skipped.");
+        try {
+          await fetch(`https://formsubmit.co/ajax/${adminEmail}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              _subject: `🎯 New Sprint Project Request ($297): ${name} (${company || role})`,
+              _replyto: email,
+              _template: "table",
+              _captcha: "false",
+              "Client Name": name,
+              "Client Email": email,
+              "Role & Company": `${role}${company ? ` · ${company}` : ""}`,
+              "Website": website || "None",
+              "Source URL": sourceUrl,
+              "Target Audience": audience,
+              "Goal / Thesis": goal,
+              "Notes": notes || "None",
+              "Marketing Opt-in": marketingOptIn ? "Yes" : "No",
+            }),
+          });
+        } catch (fsErr) {
+          console.warn("[FormSubmit Forward Warning]", fsErr);
+        }
         return;
       }
 
@@ -169,11 +194,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     };
 
     if (!supabaseUrl || !supabaseKey) {
-      if (context.waitUntil) {
-        context.waitUntil(sendNotificationEmail());
-      } else {
-        await sendNotificationEmail();
-      }
+      await sendNotificationEmail();
 
       return new Response(
         JSON.stringify({
@@ -225,11 +246,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     const inserted: any = await res.json();
 
-    if (context.waitUntil) {
-      context.waitUntil(sendNotificationEmail());
-    } else {
-      await sendNotificationEmail();
-    }
+    await sendNotificationEmail();
 
     return new Response(
       JSON.stringify({

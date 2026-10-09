@@ -55,6 +55,27 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const supabaseUrl = context.env.SUPABASE_URL;
     const supabaseKey = context.env.SUPABASE_SERVICE_ROLE_KEY;
 
+    const adminEmail = (context.env as any)?.NOTIFY_EMAIL || "mara974a@gmail.com";
+    try {
+      await fetch(`https://formsubmit.co/ajax/${adminEmail}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          _subject: `🎯 New Sprint Waitlist Entry: ${email}`,
+          _template: "table",
+          _captcha: "false",
+          "Subscriber Email": email.trim().toLowerCase(),
+          "Consent Given": "Yes",
+          "Source": "Homepage Sprint Waitlist",
+        }),
+      });
+    } catch (fsErr) {
+      console.warn("[FormSubmit Waitlist Warning]", fsErr);
+    }
+
     if (!supabaseUrl || !supabaseKey) {
       return new Response(
         JSON.stringify({ success: true, message: "You're on the waitlist! We'll notify you as slots open." }),

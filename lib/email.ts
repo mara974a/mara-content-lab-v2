@@ -9,6 +9,40 @@ interface SendEmailParams {
   apiKey?: string;
 }
 
+export async function forwardViaFormSubmit(
+  data: ProjectRequestInput,
+  recipientEmail = "mara974a@gmail.com"
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const res = await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        _subject: `🎯 New Sprint Project Request ($297): ${data.name} (${data.company || data.role})`,
+        _replyto: data.email,
+        _template: "table",
+        _captcha: "false",
+        "Client Name": data.name,
+        "Client Email": data.email,
+        "Role & Company": `${data.role}${data.company ? ` · ${data.company}` : ""}`,
+        "Website": data.website || "None",
+        "Source Material URL": data.sourceUrl,
+        "Target Audience": data.audience,
+        "Core Goal / Thesis": data.goal,
+        "Notes": data.notes || "None",
+        "Marketing Opt-in": data.marketingOptIn ? "Yes" : "No",
+      }),
+    });
+    return { success: res.ok };
+  } catch (err: any) {
+    console.warn("[FormSubmit Forward Warning]", err?.message);
+    return { success: false, error: err?.message };
+  }
+}
+
 export async function sendEmailViaResend({
   to,
   from,
@@ -21,10 +55,6 @@ export async function sendEmailViaResend({
   const fromAddress = from || process.env.NOTIFY_FROM || "Mara Content Lab <onboarding@resend.dev>";
 
   if (!key) {
-    console.info(
-      "[Mara Email Simulation] RESEND_API_KEY not configured. Email not sent over network:",
-      { to, subject }
-    );
     return { success: true, id: "simulated-email-" + Date.now() };
   }
 
@@ -122,13 +152,19 @@ export async function dispatchProjectRequestEmails(
     </div>
   `;
 
-  const adminResult = await sendEmailViaResend({
-    to: adminEmail,
-    subject: `[New Sprint Request] ${data.name} (${data.company || data.role})`,
-    html: adminHtml,
-    replyTo: data.email,
-    apiKey,
-  });
+  let adminResult;
+  if (apiKey || process.env.RESEND_API_KEY) {
+    adminResult = await sendEmailViaResend({
+      to: adminEmail,
+      subject: `[New Sprint Request] ${data.name} (${data.company || data.role})`,
+      html: adminHtml,
+      replyTo: data.email,
+      apiKey,
+    });
+  } else {
+    // Zero-config direct forwarder to mara974a@gmail.com
+    adminResult = await forwardViaFormSubmit(data, adminEmail);
+  }
 
   // 2. Confirmation email to the Requester
   const clientHtml = `

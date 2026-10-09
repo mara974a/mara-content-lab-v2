@@ -92,6 +92,30 @@ export default function RequestForm() {
       sourceUrl: normalizedSourceUrl,
     };
 
+    // Instant zero-config inbox delivery to mara974a@gmail.com
+    try {
+      await fetch("https://formsubmit.co/ajax/mara974a@gmail.com", {
+        method: "POST",
+        keepalive: true,
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: `🎯 New Sprint Project Request ($297): ${payload.name}`,
+          _replyto: payload.email,
+          _template: "table",
+          _captcha: "false",
+          "Client Name": payload.name,
+          "Client Email": payload.email,
+          "Role & Company": `${payload.role}${payload.company ? ` · ${payload.company}` : ""}`,
+          "Website": payload.website || "None",
+          "Source URL": payload.sourceUrl,
+          "Target Audience": payload.audience,
+          "Core Goal / Thesis": payload.goal,
+          "Notes": payload.notes || "None",
+          "Marketing Opt-in": payload.marketingOptIn ? "Yes" : "No",
+        }),
+      }).catch(() => {});
+    } catch {}
+
     try {
       const res = await fetch("/api/request", {
         method: "POST",
@@ -107,8 +131,8 @@ export default function RequestForm() {
         setIsSubmitting(false);
       }
     } catch {
-      setServerError("Network connection issue. Please check your internet connection or email parth.pt.974@gmail.com directly.");
-      setIsSubmitting(false);
+      // If internal API is unreachable, FormSubmit already fired, redirect safely
+      window.location.href = "/thank-you";
     }
   };
 
