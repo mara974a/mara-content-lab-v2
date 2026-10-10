@@ -9,6 +9,7 @@ const securityHeaders = [
 const isCloudflareExport = process.env.CF_PAGES === "1" || process.env.OUTPUT_EXPORT === "true";
 
 const nextConfig = {
+  trailingSlash: true,
   ...(isCloudflareExport ? { output: "export" } : {}),
   reactStrictMode: true,
   poweredByHeader: false,

@@ -9,12 +9,19 @@ interface SendEmailParams {
   apiKey?: string;
 }
 
+function getEnv(key: string): string | undefined {
+  if (typeof process !== "undefined" && process?.env) {
+    return process.env[key];
+  }
+  return undefined;
+}
+
 export async function forwardViaWeb3Forms(
   data: ProjectRequestInput,
   accessKey?: string,
   recipientEmail = "mara974a@gmail.com"
 ): Promise<{ success: boolean; error?: string }> {
-  const key = accessKey || process.env.WEB3FORMS_ACCESS_KEY;
+  const key = accessKey || getEnv("WEB3FORMS_ACCESS_KEY");
   if (!key) {
     return { success: false, error: "Web3Forms access key not configured." };
   }
@@ -61,8 +68,8 @@ export async function sendEmailViaResend({
   replyTo,
   apiKey,
 }: SendEmailParams): Promise<{ success: boolean; id?: string; error?: string }> {
-  const key = apiKey || process.env.RESEND_API_KEY;
-  const fromAddress = from || process.env.NOTIFY_FROM || "Mara Content Lab <onboarding@resend.dev>";
+  const key = apiKey || getEnv("RESEND_API_KEY");
+  const fromAddress = from || getEnv("NOTIFY_FROM") || "Mara Content Lab <onboarding@resend.dev>";
 
   if (!key) {
     return { success: true, id: "simulated-email-" + Date.now() };
@@ -103,7 +110,7 @@ export async function dispatchProjectRequestEmails(
   apiKey?: string,
   adminEmailOverride?: string
 ) {
-  const adminEmail = adminEmailOverride || process.env.NOTIFY_EMAIL || "mara974a@gmail.com";
+  const adminEmail = adminEmailOverride || getEnv("NOTIFY_EMAIL") || "mara974a@gmail.com";
 
   // 1. Email notification to Admin (Parth / Mara)
   const adminHtml = `
@@ -163,7 +170,7 @@ export async function dispatchProjectRequestEmails(
   `;
 
   let adminResult;
-  if (apiKey || process.env.RESEND_API_KEY) {
+  if (apiKey || getEnv("RESEND_API_KEY")) {
     adminResult = await sendEmailViaResend({
       to: adminEmail,
       subject: `[New Sprint Request] ${data.name} (${data.company || data.role})`,
@@ -171,8 +178,8 @@ export async function dispatchProjectRequestEmails(
       replyTo: data.email,
       apiKey,
     });
-  } else if (process.env.WEB3FORMS_ACCESS_KEY) {
-    adminResult = await forwardViaWeb3Forms(data, process.env.WEB3FORMS_ACCESS_KEY, adminEmail);
+  } else if (getEnv("WEB3FORMS_ACCESS_KEY")) {
+    adminResult = await forwardViaWeb3Forms(data, getEnv("WEB3FORMS_ACCESS_KEY"), adminEmail);
   } else {
     console.info(
       "[Mara Dev Email Simulation] Project request email logged (configure RESEND_API_KEY in .env.local for production inbox delivery):",
@@ -214,7 +221,7 @@ export async function dispatchProjectRequestEmails(
 
   let clientResult = { success: true };
   // Only attempt client receipt if Resend is enabled with a real API key
-  if (apiKey || process.env.RESEND_API_KEY) {
+  if (apiKey || getEnv("RESEND_API_KEY")) {
     try {
       clientResult = await sendEmailViaResend({
         to: data.email,
