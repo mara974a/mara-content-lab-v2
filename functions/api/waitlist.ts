@@ -1,6 +1,9 @@
 interface Env {
   SUPABASE_URL?: string;
   SUPABASE_SERVICE_ROLE_KEY?: string;
+  NOTIFY_EMAIL?: string;
+  RESEND_API_KEY?: string;
+  WEB3FORMS_ACCESS_KEY?: string;
 }
 
 type PagesFunction<T = any> = (context: {
@@ -52,28 +55,32 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       );
     }
 
-    const supabaseUrl = context.env.SUPABASE_URL;
-    const supabaseKey = context.env.SUPABASE_SERVICE_ROLE_KEY;
+    const supabaseUrl = context.env?.SUPABASE_URL;
+    const supabaseKey = context.env?.SUPABASE_SERVICE_ROLE_KEY;
+    const adminEmail = context.env?.NOTIFY_EMAIL || "mara974a@gmail.com";
+    const web3FormsKey = context.env?.WEB3FORMS_ACCESS_KEY;
 
-    const adminEmail = (context.env as any)?.NOTIFY_EMAIL || "mara974a@gmail.com";
-    try {
-      await fetch(`https://formsubmit.co/ajax/${adminEmail}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          _subject: `🎯 New Sprint Waitlist Entry: ${email}`,
-          _template: "table",
-          _captcha: "false",
-          "Subscriber Email": email.trim().toLowerCase(),
-          "Consent Given": "Yes",
-          "Source": "Homepage Sprint Waitlist",
-        }),
-      });
-    } catch (fsErr) {
-      console.warn("[FormSubmit Waitlist Warning]", fsErr);
+    if (web3FormsKey) {
+      try {
+        await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            access_key: web3FormsKey,
+            subject: `🎯 New Sprint Waitlist Entry: ${email}`,
+            from_name: "Mara Content Lab",
+            to_email: adminEmail,
+            email: email.trim().toLowerCase(),
+            consent: "Yes",
+            source: "Homepage Sprint Waitlist",
+          }),
+        });
+      } catch (w3Err) {
+        console.warn("[Web3Forms Waitlist Warning]", w3Err);
+      }
     }
 
     if (!supabaseUrl || !supabaseKey) {

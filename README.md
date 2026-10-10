@@ -104,15 +104,23 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## Deployment (Vercel)
+## Deployment (Cloudflare Pages via GitHub)
 
 1. Push this repository to GitHub (`https://github.com/mara974a/mara-content-lab-v2`).
-2. Import the project into [Vercel](https://vercel.com).
-3. Under **Project Settings → Environment Variables**, add:
-   - `NEXT_PUBLIC_SITE_URL`: `https://your-domain.com`
-   - `SUPABASE_URL`: `https://your-project.supabase.co`
-   - `SUPABASE_SERVICE_ROLE_KEY`: `your-service-role-key`
-4. Click **Deploy**.
+2. In your [Cloudflare Dashboard](https://dash.cloudflare.com):
+   - Navigate to **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**.
+   - Select your GitHub account and choose the repository `mara974a/mara-content-lab-v2`.
+3. Configure the build settings:
+   - **Framework preset**: `Next.js (Static HTML Export)`
+   - **Build command**: `npm run build`
+   - **Build output directory**: `out`
+   - **Root directory**: `/` (leave empty)
+4. Under **Environment variables**, optionally add:
+   - `NOTIFY_EMAIL`: `mara974a@gmail.com`
+   - `RESEND_API_KEY`: your Resend API key (from [resend.com](https://resend.com))
+   - `SUPABASE_URL`: your Supabase project URL (from [supabase.com](https://supabase.com))
+   - `SUPABASE_SERVICE_ROLE_KEY`: your Supabase service role secret key
+5. Click **Save and Deploy**. Cloudflare Pages will build the static HTML into `out/` and automatically deploy the serverless edge handlers in `functions/` for `/api/request` and `/api/waitlist`.
 
 ---
 

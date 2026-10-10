@@ -3,6 +3,7 @@ interface Env {
   SUPABASE_SERVICE_ROLE_KEY?: string;
   RESEND_API_KEY?: string;
   NOTIFY_EMAIL?: string;
+  WEB3FORMS_ACCESS_KEY?: string;
 }
 
 type PagesFunction<T = any> = (context: {
@@ -96,36 +97,51 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const supabaseUrl = context.env?.SUPABASE_URL;
     const supabaseKey = context.env?.SUPABASE_SERVICE_ROLE_KEY;
     const resendApiKey = context.env?.RESEND_API_KEY;
+    const web3FormsKey = context.env?.WEB3FORMS_ACCESS_KEY;
     const adminEmail = context.env?.NOTIFY_EMAIL || "mara974a@gmail.com";
 
     // Email dispatch function for Cloudflare Worker
     const sendNotificationEmail = async () => {
-      if (!resendApiKey) {
+      // 1. Web3Forms fallback if configured
+      if (web3FormsKey) {
         try {
-          await fetch(`https://formsubmit.co/ajax/${adminEmail}`, {
+          await fetch("https://api.web3forms.com/submit", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               Accept: "application/json",
             },
             body: JSON.stringify({
-              _subject: `🎯 New Sprint Project Request ($297): ${name} (${company || role})`,
-              _replyto: email,
-              _template: "table",
-              _captcha: "false",
-              "Client Name": name,
-              "Client Email": email,
-              "Role & Company": `${role}${company ? ` · ${company}` : ""}`,
-              "Website": website || "None",
-              "Source URL": sourceUrl,
-              "Target Audience": audience,
-              "Goal / Thesis": goal,
-              "Notes": notes || "None",
-              "Marketing Opt-in": marketingOptIn ? "Yes" : "No",
+              access_key: web3FormsKey,
+              subject: `🎯 New Sprint Project Request ($297): ${name} (${company || role})`,
+              from_name: "Mara Content Lab",
+              to_email: adminEmail,
+              replyto: email,
+              name,
+              email,
+              role,
+              company: company || "None",
+              website: website || "None",
+              source_url: sourceUrl,
+              audience,
+              goal,
+              notes: notes || "None",
+              marketing_opt_in: marketingOptIn ? "Yes" : "No",
             }),
           });
-        } catch (fsErr) {
-          console.warn("[FormSubmit Forward Warning]", fsErr);
+        } catch (w3Err) {
+          console.warn("[Web3Forms Forward Warning]", w3Err);
+        }
+      }
+
+      if (!resendApiKey) {
+        if (!web3FormsKey) {
+          console.info("[Cloudflare Worker Log] New Project Request received (configure RESEND_API_KEY in Pages settings for email delivery):", {
+            name,
+            email,
+            role,
+            sourceUrl,
+          });
         }
         return;
       }

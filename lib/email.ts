@@ -9,36 +9,46 @@ interface SendEmailParams {
   apiKey?: string;
 }
 
-export async function forwardViaFormSubmit(
+export async function forwardViaWeb3Forms(
   data: ProjectRequestInput,
+  accessKey?: string,
   recipientEmail = "mara974a@gmail.com"
 ): Promise<{ success: boolean; error?: string }> {
+  const key = accessKey || process.env.WEB3FORMS_ACCESS_KEY;
+  if (!key) {
+    return { success: false, error: "Web3Forms access key not configured." };
+  }
+
   try {
-    const res = await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
+    const res = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
       body: JSON.stringify({
-        _subject: `🎯 New Sprint Project Request ($297): ${data.name} (${data.company || data.role})`,
-        _replyto: data.email,
-        _template: "table",
-        _captcha: "false",
-        "Client Name": data.name,
-        "Client Email": data.email,
-        "Role & Company": `${data.role}${data.company ? ` · ${data.company}` : ""}`,
-        "Website": data.website || "None",
-        "Source Material URL": data.sourceUrl,
-        "Target Audience": data.audience,
-        "Core Goal / Thesis": data.goal,
-        "Notes": data.notes || "None",
-        "Marketing Opt-in": data.marketingOptIn ? "Yes" : "No",
+        access_key: key,
+        subject: `🎯 New Sprint Project Request ($297): ${data.name} (${data.company || data.role})`,
+        from_name: "Mara Content Lab",
+        to_email: recipientEmail,
+        replyto: data.email,
+        name: data.name,
+        email: data.email,
+        role: data.role,
+        company: data.company || "None",
+        website: data.website || "None",
+        source_url: data.sourceUrl,
+        audience: data.audience,
+        goal: data.goal,
+        notes: data.notes || "None",
+        marketing_opt_in: data.marketingOptIn ? "Yes" : "No",
       }),
     });
-    return { success: res.ok };
+
+    const json: any = await res.json().catch(() => null);
+    return { success: res.ok && json?.success !== false, error: json?.message };
   } catch (err: any) {
-    console.warn("[FormSubmit Forward Warning]", err?.message);
+    console.warn("[Web3Forms Dispatch Warning]", err?.message);
     return { success: false, error: err?.message };
   }
 }
@@ -161,9 +171,14 @@ export async function dispatchProjectRequestEmails(
       replyTo: data.email,
       apiKey,
     });
+  } else if (process.env.WEB3FORMS_ACCESS_KEY) {
+    adminResult = await forwardViaWeb3Forms(data, process.env.WEB3FORMS_ACCESS_KEY, adminEmail);
   } else {
-    // Zero-config direct forwarder to mara974a@gmail.com
-    adminResult = await forwardViaFormSubmit(data, adminEmail);
+    console.info(
+      "[Mara Dev Email Simulation] Project request email logged (configure RESEND_API_KEY in .env.local for production inbox delivery):",
+      { to: adminEmail, requester: data.name, email: data.email, source: data.sourceUrl }
+    );
+    adminResult = { success: true };
   }
 
   // 2. Confirmation email to the Requester

@@ -16,9 +16,13 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
     unoptimized: isCloudflareExport,
   },
-  async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
-  },
+  ...(isCloudflareExport
+    ? {}
+    : {
+        async headers() {
+          return [{ source: "/:path*", headers: securityHeaders }];
+        },
+      }),
 };
 
 module.exports = nextConfig;

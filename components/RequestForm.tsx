@@ -92,30 +92,6 @@ export default function RequestForm() {
       sourceUrl: normalizedSourceUrl,
     };
 
-    // Instant zero-config inbox delivery to mara974a@gmail.com
-    try {
-      await fetch("https://formsubmit.co/ajax/mara974a@gmail.com", {
-        method: "POST",
-        keepalive: true,
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          _subject: `🎯 New Sprint Project Request ($297): ${payload.name}`,
-          _replyto: payload.email,
-          _template: "table",
-          _captcha: "false",
-          "Client Name": payload.name,
-          "Client Email": payload.email,
-          "Role & Company": `${payload.role}${payload.company ? ` · ${payload.company}` : ""}`,
-          "Website": payload.website || "None",
-          "Source URL": payload.sourceUrl,
-          "Target Audience": payload.audience,
-          "Core Goal / Thesis": payload.goal,
-          "Notes": payload.notes || "None",
-          "Marketing Opt-in": payload.marketingOptIn ? "Yes" : "No",
-        }),
-      }).catch(() => {});
-    } catch {}
-
     try {
       const res = await fetch("/api/request", {
         method: "POST",
@@ -123,18 +99,38 @@ export default function RequestForm() {
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json();
-      if (res.ok && data.success) {
+      const data = await res.json().catch(() => null);
+
+      if (res.ok && data?.success) {
         window.location.href = "/thank-you";
       } else {
-        setServerError(data.message || "Failed to submit project request. Please try again.");
+        setServerError(
+          data?.message ||
+          "Unable to record your project request at this moment. You can retry below, or send your details directly via email."
+        );
         setIsSubmitting(false);
       }
-    } catch {
-      // If internal API is unreachable, FormSubmit already fired, redirect safely
-      window.location.href = "/thank-you";
+    } catch (err: any) {
+      setServerError(
+        "Network connection issue: Could not reach the submission server. You can retry, or email your details directly to Parth at mara974a@gmail.com."
+      );
+      setIsSubmitting(false);
     }
   };
+
+  const mailtoSubject = encodeURIComponent(`🎯 Project Request ($297): ${formData.name || "Sprint Inquiry"}`);
+  const mailtoBody = encodeURIComponent(
+    `Hi Parth,\n\nI submitted a request on Mara Content Lab with the following details:\n\n` +
+    `Name: ${formData.name}\n` +
+    `Email: ${formData.email}\n` +
+    `Role: ${formData.role}\n` +
+    `Company: ${formData.company || "N/A"}\n` +
+    `Website / Profile: ${formData.website || "N/A"}\n` +
+    `Source URL: ${formData.sourceUrl}\n` +
+    `Target Audience: ${formData.audience}\n` +
+    `Core Goal / Thesis: ${formData.goal}\n` +
+    `Additional Notes: ${formData.notes || "None"}\n`
+  );
 
   return (
     <div className="card" style={{ maxWidth: "720px", margin: "0 auto", padding: "clamp(1.5rem, 4vw, 2.75rem)" }}>
@@ -158,8 +154,15 @@ export default function RequestForm() {
       </div>
 
       {serverError && (
-        <div style={{ backgroundColor: "#FEE2E2", border: "1px solid #FCA5A5", color: "#991B1B", padding: "0.75rem 1rem", borderRadius: "var(--radius-md)", marginBottom: "1.5rem", fontSize: "0.875rem" }}>
-          {serverError}
+        <div style={{ backgroundColor: "#FEE2E2", border: "1px solid #FCA5A5", color: "#991B1B", padding: "1rem", borderRadius: "var(--radius-md)", marginBottom: "1.5rem", fontSize: "0.875rem" }}>
+          <p style={{ fontWeight: 600, marginBottom: "0.5rem" }}>{serverError}</p>
+          <a
+            href={`mailto:mara974a@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}`}
+            className="btn btn-secondary"
+            style={{ display: "inline-block", fontSize: "0.8125rem", padding: "0.375rem 0.75rem", backgroundColor: "#ffffff" }}
+          >
+            ✉ Email Details Directly to mara974a@gmail.com →
+          </a>
         </div>
       )}
 

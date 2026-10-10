@@ -8,3 +8,5 @@ npm-debug.log*
 .env*.local
 *.zip
 scratch/
+.wrangler/
+.dev.vars

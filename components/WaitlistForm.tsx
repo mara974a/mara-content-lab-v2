@@ -26,23 +26,6 @@ export default function WaitlistForm() {
     setStatus("loading");
     setMessage("");
 
-    // Instant zero-config inbox delivery to mara974a@gmail.com
-    try {
-      await fetch("https://formsubmit.co/ajax/mara974a@gmail.com", {
-        method: "POST",
-        keepalive: true,
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          _subject: `🎯 New Sprint Waitlist Entry: ${email}`,
-          _template: "table",
-          _captcha: "false",
-          "Subscriber Email": email,
-          "Consent Given": "Yes",
-          "Source": "Homepage Sprint Waitlist",
-        }),
-      }).catch(() => {});
-    } catch {}
-
     try {
       const res = await fetch("/api/waitlist", {
         method: "POST",
@@ -50,22 +33,19 @@ export default function WaitlistForm() {
         body: JSON.stringify({ email: email.trim().toLowerCase(), consent }),
       });
 
-      const data = await res.json();
-      if (res.ok && data.success) {
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.success) {
         setStatus("success");
         setMessage("You're on the list. We will notify you when sprint availability opens.");
         setEmail("");
         setConsent(false);
       } else {
         setStatus("error");
-        setMessage(data.message || "Failed to join waitlist. Please try again.");
+        setMessage(data?.message || "Failed to join waitlist. Please try again.");
       }
     } catch {
-      // In case of ad-blocker or strict network intercept, provide fallback success
-      setStatus("success");
-      setMessage("You're on the list. We will notify you when sprint availability opens.");
-      setEmail("");
-      setConsent(false);
+      setStatus("error");
+      setMessage("Connection issue: Could not reach the server. Please try again or email mara974a@gmail.com directly.");
     }
   };
 
