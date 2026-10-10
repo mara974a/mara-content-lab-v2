@@ -122,11 +122,3 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
    - `SUPABASE_SERVICE_ROLE_KEY`: your Supabase service role secret key
 5. Click **Save and Deploy**. Cloudflare Pages will build the static HTML into `out/` and automatically deploy the serverless edge handlers in `functions/` for `/api/request` and `/api/waitlist`.
 
----
-
-## What Was Cleaned Up & Deprecated
-
-- **Removed heavy video background loops**: Deleted ~15MB of video files (`hero-loop.mp4`, `motion-loop.mp4`, `process-loop.mp4`, `accountability-loop.mp4`) that drained mobile batteries, failed on low-power mode, and slowed down page load times.
-- **Removed 95KB complex matrix CSS**: Replaced the previous monolithic, transform-heavy styling with a clean `< 12KB` responsive B2B design system that renders instantly on all mobile and desktop devices.
-- **Removed dot artifact on portrait**: Completely eliminated the previous reticle dot overlay that appeared over Parth's nose in the About section.
-- **Streamlined single-page anchor flow**: Re-established clean semantic sections (Hero, Problem, The Sprint Offer, 5-Step Process, Human Accountability, Verified Paul Graham Sample, Fit Matrix, Operator Card, and FAQ Accordion).
