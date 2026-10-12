@@ -14,7 +14,7 @@ const termsSections = [
     title: "1. Operator & Service Scope",
     content: (
       <p>
-        Mara Content Lab (&ldquo;Mara&rdquo;) is operated by <strong>Parth Tiwari</strong>, an independent editor based in India. Mara provides text-first editorial and ghostwriting services designed to turn substantive source materials into defensible LinkedIn content. The default offering is the <strong>Source-to-Authority Sprint ($297 USD)</strong>, which includes one LinkedIn authority post, one document-post outline, three future content angles, three hook variations, and one consolidated revision round.
+        Mara Content Lab (&ldquo;Mara&rdquo;) is operated by <strong>Parth Tiwari</strong>, an independent editor based in India. Mara provides text-first editorial and ghostwriting services designed to turn substantive source materials into defensible LinkedIn content. The standard offering is the <strong>Source-to-Authority Sprint ($297 USD)</strong>; a <strong>$149 USD first-buy price</strong> is available for a client&rsquo;s first sprint in exchange for completing a short written feedback form after delivery. The sprint includes one LinkedIn authority post, one document-post outline, three future content angles, three hook variations, and one consolidated revision round.
       </p>
     ),
   },
@@ -30,7 +30,7 @@ const termsSections = [
     title: "3. Pricing & Payment Terms",
     content: (
       <p>
-        All prices are quoted in USD unless agreed otherwise in writing. Because Mara reserves dedicated editorial capacity, full payment is required prior to commencing work. Payments are processed via private invoice/link (such as Wise or direct electronic bank transfer). Any payment processing or international currency conversion fees imposed by your bank are your responsibility.
+        The standard sprint price is $297 USD. A first sprint is offered at $149 USD in exchange for the client completing the short feedback form on this site after delivery; feedback is never published or quoted publicly without the client&rsquo;s separate, explicit permission. All prices are quoted in USD unless agreed otherwise in writing. Because Mara reserves dedicated editorial capacity, full payment is required prior to commencing work. Payments are processed via private invoice/link (such as Wise or direct electronic bank transfer). Any payment processing or international currency conversion fees imposed by your bank are your responsibility.
       </p>
     ),
   },

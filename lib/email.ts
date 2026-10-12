@@ -23,6 +23,7 @@ export async function forwardViaWeb3Forms(
 ): Promise<{ success: boolean; error?: string }> {
   const key = accessKey || getEnv("WEB3FORMS_ACCESS_KEY");
   if (!key) {
+    console.error("[Email Failure] Web3Forms access key is not configured.");
     return { success: false, error: "Web3Forms access key not configured." };
   }
 
@@ -53,10 +54,16 @@ export async function forwardViaWeb3Forms(
     });
 
     const json: any = await res.json().catch(() => null);
-    return { success: res.ok && json?.success !== false, error: json?.message };
+    if (!res.ok || json?.success === false) {
+      const errMsg = json?.message || `HTTP ${res.status}`;
+      console.error(`[Email Failure] Web3Forms submission failed: ${errMsg}`);
+      return { success: false, error: errMsg };
+    }
+    return { success: true };
   } catch (err: any) {
-    console.warn("[Web3Forms Dispatch Warning]", err?.message);
-    return { success: false, error: err?.message };
+    const errMsg = err?.message || "Failed to reach Web3Forms API.";
+    console.error(`[Email Failure] Network error contacting Web3Forms API: ${errMsg}`);
+    return { success: false, error: errMsg };
   }
 }
 
@@ -72,7 +79,8 @@ export async function sendEmailViaResend({
   const fromAddress = from || getEnv("NOTIFY_FROM") || "Mara Content Lab <onboarding@resend.dev>";
 
   if (!key) {
-    return { success: true, id: "simulated-email-" + Date.now() };
+    console.error("[Email Failure] Resend API key is not configured.");
+    return { success: false, error: "Resend API key is not configured." };
   }
 
   try {
@@ -92,16 +100,17 @@ export async function sendEmailViaResend({
     });
 
     if (!res.ok) {
-      const errText = await res.text();
-      console.error("[Resend API Error]", res.status, errText);
-      return { success: false, error: `Resend error: ${res.status}` };
+      const errText = await res.text().catch(() => "");
+      console.error(`[Email Failure] Resend API returned status ${res.status}: ${errText}`);
+      return { success: false, error: `Resend error: ${res.status} ${errText}` };
     }
 
-    const data: any = await res.json();
+    const data: any = await res.json().catch(() => ({}));
     return { success: true, id: data?.id };
   } catch (err: any) {
-    console.error("[Resend Network Error]", err);
-    return { success: false, error: err.message || "Failed to reach Resend API." };
+    const errMsg = err?.message || "Failed to reach Resend API.";
+    console.error(`[Email Failure] Network error contacting Resend API: ${errMsg}`);
+    return { success: false, error: errMsg };
   }
 }
 
@@ -169,26 +178,39 @@ export async function dispatchProjectRequestEmails(
     </div>
   `;
 
-  let adminResult;
-  if (apiKey || getEnv("RESEND_API_KEY")) {
+  let adminResult: { success: boolean; id?: string; error?: string };
+  const resendKey = apiKey || getEnv("RESEND_API_KEY");
+  const web3Key = getEnv("WEB3FORMS_ACCESS_KEY");
+
+  if (!resendKey && !web3Key) {
+    console.error("[Email Failure] No email provider configured: Neither RESEND_API_KEY nor WEB3FORMS_ACCESS_KEY is set.");
+    return {
+      adminResult: { success: false, error: "No email provider configured." },
+      clientResult: { success: false, error: "No email provider configured." },
+    };
+  }
+
+  if (resendKey) {
     adminResult = await sendEmailViaResend({
       to: adminEmail,
       subject: `[New Sprint Request] ${data.name} (${data.company || data.role})`,
       html: adminHtml,
       replyTo: data.email,
-      apiKey,
+      apiKey: resendKey,
     });
-  } else if (getEnv("WEB3FORMS_ACCESS_KEY")) {
-    adminResult = await forwardViaWeb3Forms(data, getEnv("WEB3FORMS_ACCESS_KEY"), adminEmail);
   } else {
-    console.info(
-      "[Mara Dev Email Simulation] Project request email logged (configure RESEND_API_KEY in .env.local for production inbox delivery):",
-      { to: adminEmail, requester: data.name, email: data.email, source: data.sourceUrl }
-    );
-    adminResult = { success: true };
+    adminResult = await forwardViaWeb3Forms(data, web3Key, adminEmail);
   }
 
-  // 2. Confirmation email to the Requester
+  if (!adminResult.success) {
+    console.error(`[Email Failure] Notification email to ${adminEmail} failed: ${adminResult.error || "Unknown error"}`);
+    return {
+      adminResult,
+      clientResult: { success: false, error: "Skipped client confirmation because notification email failed." },
+    };
+  }
+
+  // 2. Confirmation email to the Requester (Best-effort: failure is logged but does not fail the request)
   const clientHtml = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #111827; background: #ffffff; border: 1px solid #E5E7EB; border-radius: 8px;">
       <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 16px; color: #111827;">
@@ -219,19 +241,23 @@ export async function dispatchProjectRequestEmails(
     </div>
   `;
 
-  let clientResult = { success: true };
-  // Only attempt client receipt if Resend is enabled with a real API key
-  if (apiKey || getEnv("RESEND_API_KEY")) {
+  let clientResult: { success: boolean; id?: string; error?: string } = { success: true };
+  if (resendKey) {
     try {
       clientResult = await sendEmailViaResend({
         to: data.email,
         subject: `We received your sprint request — Mara Content Lab`,
         html: clientHtml,
         replyTo: adminEmail,
-        apiKey,
+        apiKey: resendKey,
       });
-    } catch (e) {
-      console.warn("[Client Confirmation Email Warning]", e);
+      if (!clientResult.success) {
+        console.warn(`[Email Warning] Client confirmation email to ${data.email} failed: ${clientResult.error || "Unknown error"}`);
+      }
+    } catch (e: any) {
+      const reason = e?.message || String(e);
+      console.warn(`[Email Warning] Client confirmation email to ${data.email} failed: ${reason}`);
+      clientResult = { success: false, error: reason };
     }
   }
 

@@ -18,7 +18,7 @@ export default function Header() {
         {/* Desktop Navigation */}
         <nav className="nav-links" aria-label="Primary navigation">
           <a href="/#problem" className="nav-link">Problem</a>
-          <a href="/#offer" className="nav-link">The Sprint ($297)</a>
+          <a href="/#offer" className="nav-link">The Sprint ($149 first buy)</a>
           <a href="/#process" className="nav-link">Process</a>
           <a href="/#sample" className="nav-link">Sample</a>
           <a href="/#fit" className="nav-link">Fit</a>
@@ -59,7 +59,7 @@ export default function Header() {
         <div className="mobile-menu-drawer">
           <nav className="mobile-nav-links" aria-label="Mobile navigation">
             <a href="/#problem" className="mobile-nav-link" onClick={closeMenu}>Problem</a>
-            <a href="/#offer" className="mobile-nav-link" onClick={closeMenu}>The Sprint ($297)</a>
+            <a href="/#offer" className="mobile-nav-link" onClick={closeMenu}>The Sprint ($149 first buy)</a>
             <a href="/#process" className="mobile-nav-link" onClick={closeMenu}>Process</a>
             <a href="/#sample" className="mobile-nav-link" onClick={closeMenu}>Sample</a>
             <a href="/#fit" className="mobile-nav-link" onClick={closeMenu}>Fit</a>
@@ -80,7 +80,7 @@ export default function Header() {
               style={{ width: "100%", marginTop: "0.5rem" }}
               onClick={closeMenu}
             >
-              Request a Project — $297
+              Request a Project — $149 First Buy
             </Link>
           </nav>
         </div>

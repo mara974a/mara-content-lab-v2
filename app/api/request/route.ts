@@ -95,9 +95,24 @@ export async function POST(req: NextRequest) {
       marketingOptIn: Boolean(marketingOptIn),
     };
 
+    const resendKey = process.env.RESEND_API_KEY;
+    const web3Key = process.env.WEB3FORMS_ACCESS_KEY;
+    if (!resendKey && !web3Key) {
+      console.error("[Email Failure] No email provider configured: Neither RESEND_API_KEY nor WEB3FORMS_ACCESS_KEY is set.");
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Email delivery service is not configured. Please use the direct email link below.",
+          error: "No email provider configured.",
+        },
+        { status: 500 }
+      );
+    }
+
     const result = await insertProjectRequest(requestData, userAgent);
 
     if (!result.success) {
+      console.error(`[Database Failure] Failed to record request in Supabase: ${result.error || "Unknown error"}`);
       return NextResponse.json(
         { success: false, message: result.error || "Failed to record request." },
         { status: 500 }
@@ -106,9 +121,29 @@ export async function POST(req: NextRequest) {
 
     // Trigger email notification to Parth / Mara
     try {
-      await dispatchProjectRequestEmails(requestData);
-    } catch (mailErr) {
-      console.warn("[Email Notification Warning]", mailErr);
+      const emailResult = await dispatchProjectRequestEmails(requestData);
+      if (!emailResult.adminResult.success) {
+        console.error(`[Email Failure] Project request notification email failed: ${emailResult.adminResult.error || "Unknown error"}`);
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Email delivery failed. Please use the direct email link below.",
+            error: emailResult.adminResult.error,
+          },
+          { status: 500 }
+        );
+      }
+    } catch (mailErr: any) {
+      const reason = mailErr?.message || String(mailErr);
+      console.error(`[Email Failure] Exception during project request email dispatch: ${reason}`);
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Email delivery failed. Please use the direct email link below.",
+          error: reason,
+        },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json(

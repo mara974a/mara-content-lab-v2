@@ -339,8 +339,8 @@ export default function RequestForm() {
 
             <div style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: "0.5rem" }}>
               <strong style={{ color: "var(--text-muted)", fontSize: "0.75rem", textTransform: "uppercase" }}>Engagement Terms</strong>
-              <p style={{ color: "var(--text-primary)", fontWeight: 600 }}>Source-to-Authority Sprint · $297 USD</p>
-              <p style={{ color: "var(--text-muted)", fontSize: "0.8125rem" }}>~5 business days turnaround once approved and paid</p>
+              <p style={{ color: "var(--text-primary)", fontWeight: 600 }}>Source-to-Authority Sprint · $149 USD first buy ($297 standard)</p>
+              <p style={{ color: "var(--text-muted)", fontSize: "0.8125rem" }}>~5 business days turnaround once approved and paid · First buy includes short feedback exchange</p>
             </div>
           </div>
 
@@ -386,7 +386,7 @@ export default function RequestForm() {
               ← Back
             </button>
             <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-              {isSubmitting ? "Submitting Request..." : "Submit Project Request ($297)"}
+              {isSubmitting ? "Submitting Request..." : "Submit Project Request ($149 First Buy)"}
             </button>
           </div>
         </form>

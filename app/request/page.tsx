@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import RequestForm from "@/components/RequestForm";
 
 export const metadata: Metadata = {
-  title: "Request a Sprint ($297) | Mara Content Lab",
+  title: "Request a Sprint ($149 First Buy) | Mara Content Lab",
   description:
     "Submit your raw talk, podcast, interview, or essay for the Source-to-Authority Sprint. Reviewed personally within one business day.",
 };

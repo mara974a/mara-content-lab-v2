@@ -30,6 +30,7 @@ const policySections = [
           <li><strong>Contact Information:</strong> Name and work email address.</li>
           <li><strong>Professional Context:</strong> Your role, title, company or firm name, and website or LinkedIn URL (if provided).</li>
           <li><strong>Project Inputs:</strong> The source URL (talk, podcast, call, or essay), target audience description, core content goal, and any notes or constraints you submit.</li>
+          <li><strong>Client Feedback:</strong> If you submit the feedback form at /feedback, we collect your name, email, ratings (1–5), feedback comments, and whether you explicitly consent to public quotation. Feedback is never published or quoted without your separate, explicit permission.</li>
           <li><strong>Consent Records:</strong> Confirmation of your acceptance of our terms, date and time of submission, and marketing opt-in choice.</li>
           <li><strong>Technical Data:</strong> Basic technical logs (such as IP address, browser type, and operating system) collected automatically by our hosting platform (Vercel) to protect service security and performance.</li>
         </ul>

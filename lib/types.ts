@@ -36,6 +36,17 @@ export interface WaitlistRecord {
   source: string;
 }
 
+export interface FeedbackInput {
+  name: string;
+  email: string;
+  rating: number;
+  mostUseful: string;
+  improve: string;
+  postResult?: string;
+  allowQuote: boolean;
+  displayName?: string;
+}
+
 export interface ActionResponse {
   success: boolean;
   message?: string;

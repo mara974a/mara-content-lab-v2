@@ -28,12 +28,13 @@ export default function Footer() {
               Navigation
             </h4>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.625rem", fontSize: "0.9375rem" }}>
-              <li><a href="/#offer" className="nav-link">The Sprint ($297)</a></li>
+              <li><a href="/#offer" className="nav-link">The Sprint ($149 first buy)</a></li>
               <li><a href="/#process" className="nav-link">5-Step Process</a></li>
               <li><a href="/#sample" className="nav-link">Editorial Sample</a></li>
               <li><a href="/#fit" className="nav-link">Fit Matrix</a></li>
               <li><a href="/#about" className="nav-link">About Parth Tiwari</a></li>
               <li><a href="/#faq" className="nav-link">FAQ</a></li>
+              <li><Link href="/feedback" className="nav-link">Share Feedback</Link></li>
               <li><Link href="/request" className="nav-link" style={{ color: "var(--accent-blue)", fontWeight: 600 }}>Request a Project</Link></li>
             </ul>
           </div>

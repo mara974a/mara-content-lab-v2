@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Mara Content Lab | Source-to-Authority Sprint",
     description:
-      "Turn one strong source into clear, authoritative LinkedIn content. Fixed $297 Sprint, delivered within 5 business days.",
+      "Turn one approved conversation into clear LinkedIn content. $149 USD first sprint, $297 USD standard.",
     type: "website",
     locale: "en_US",
   },

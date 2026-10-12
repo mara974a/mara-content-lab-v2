@@ -43,7 +43,12 @@ const faqs = [
   {
     question: "What happens after I submit a project request?",
     answer:
-      "Every submission is reviewed personally by Parth Tiwari within one business day. If your source is a fit, you will receive scope confirmation and a private payment link. Work begins only after source approval and payment are confirmed.",
+      "Every submission is reviewed personally by Parth Tiwari within one business day. If your source is a fit, you will receive scope confirmation and private payment details. Work begins only after source approval and payment are confirmed.",
+  },
+  {
+    question: "What is the $149 first-buy price and what do I give in return?",
+    answer:
+      "Your first sprint is $149 USD instead of the standard $297 USD. In exchange, you fill in a short feedback form after delivery: what was useful, what could be improved, and how the post performed for you if you choose to share that. A testimonial is completely optional and is only used if you explicitly grant permission.",
   },
   {
     question: "Does the five-business-day timeline include weekends?",
@@ -100,7 +105,7 @@ export default function HomePage() {
 
             <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "3rem" }}>
               <Link href="/request" className="btn btn-primary">
-                Request a Sprint — $297
+                Request a Sprint — $149 First Buy
               </Link>
               <a href="#sample" className="btn btn-secondary">
                 See Editorial Standard ↓
@@ -130,7 +135,10 @@ export default function HomePage() {
               </div>
               <div>
                 <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", color: "var(--text-muted)", textTransform: "uppercase" }}>Fixed Pricing</span>
-                <p style={{ fontWeight: 600, fontSize: "0.9375rem", color: "var(--text-primary)" }}>$297 USD (No subscriptions)</p>
+                <p style={{ fontWeight: 600, fontSize: "0.9375rem", color: "var(--text-primary)" }}>
+                  $149 USD <span style={{ textDecoration: "line-through", color: "var(--text-muted)", fontWeight: 400 }}>$297</span>
+                </p>
+                <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>First-buy price with feedback</span>
               </div>
               <div>
                 <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", color: "var(--text-muted)", textTransform: "uppercase" }}>Review Model</span>
@@ -194,11 +202,15 @@ export default function HomePage() {
             <div className="card" style={{ maxWidth: "860px", margin: "0 auto", padding: "clamp(2rem, 5vw, 3rem)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "1rem", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "1.5rem", marginBottom: "2rem" }}>
                 <div>
-                  <h3 style={{ fontSize: "1.75rem", fontWeight: 700 }}>$297 USD</h3>
-                  <p style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>Fixed engagement · ~5 business days delivery</p>
+                  <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--accent-blue)", display: "block", marginBottom: "0.25rem" }}>First-Buy Price</span>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "0.625rem" }}>
+                    <h3 style={{ fontSize: "1.75rem", fontWeight: 700 }}>$149 USD</h3>
+                    <span style={{ fontSize: "1.25rem", color: "var(--text-muted)", textDecoration: "line-through", fontWeight: 500 }}>$297</span>
+                  </div>
+                  <p style={{ color: "var(--text-muted)", fontSize: "0.875rem", marginTop: "0.25rem" }}>Standard price $297 afterwards · ~5 business days delivery</p>
                 </div>
                 <Link href="/request" className="btn btn-primary">
-                  Request This Sprint →
+                  Request This Sprint ($149) →
                 </Link>
               </div>
 
@@ -262,8 +274,13 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div style={{ marginTop: "2rem", paddingTop: "1.5rem", borderTop: "1px solid var(--border-subtle)", fontSize: "0.875rem", color: "var(--text-secondary)" }}>
-                <strong>Payment & Safety:</strong> Every request is reviewed personally. If the source is approved as a fit, you will receive a scope confirmation and private payment link. Work begins only after mutual approval and payment.
+              <div style={{ marginTop: "2rem", paddingTop: "1.5rem", borderTop: "1px solid var(--border-subtle)", fontSize: "0.875rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
+                <p>
+                  <strong>First-Buy Offer:</strong> Your first sprint is <strong>$149 USD</strong> (standard $297 USD) in exchange for completing a short <Link href="/feedback" style={{ color: "var(--accent-blue)", textDecoration: "underline" }}>feedback form</Link> after delivery. Your feedback is never published without your explicit permission. Standard price afterwards: $297 USD.
+                </p>
+                <p style={{ marginTop: "0.5rem" }}>
+                  <strong>Payment & Safety:</strong> Every request is reviewed personally. If the source is approved as a fit, you will receive scope confirmation and private payment details. Work begins only after mutual approval and payment.
+                </p>
               </div>
             </div>
           </div>
@@ -581,7 +598,7 @@ export default function HomePage() {
 
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "3rem" }}>
               <Link href="/request" className="btn btn-primary" style={{ padding: "0.875rem 2rem", fontSize: "1rem" }}>
-                Request a Project — $297
+                Request a Project — $149 First Buy
               </Link>
             </div>
 

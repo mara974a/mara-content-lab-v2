@@ -5,8 +5,12 @@ coverage
 npm-debug.log*
 .DS_Store
 *.tsbuildinfo
+.env
 .env*.local
+.env.production
+.env.development
 *.zip
 scratch/
 .wrangler/
 .dev.vars
+*.patch
